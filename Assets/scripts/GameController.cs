@@ -36,10 +36,10 @@ public class GameController : MonoBehaviour {
 
 		bomb.SetActive (false);
 		win.SetActive (false);
- 
-            Advertisement.Initialize("1069118");
-        
-        loadLevel (0);
+
+        Advertisement.Initialize("1069118");
+
+        loadLevel(0);
 	}
 
 	public static void Die() {
@@ -52,13 +52,16 @@ public class GameController : MonoBehaviour {
             /*levels [levelIndex].SetActive (false);
 			levels [levelIndex + 1].SetActive (true);
 			levelIndex++;*/
-            Advertisement.Show();
+            if (Advertisement.IsReady())
+            {
+                Advertisement.Show();
+            }
             isTransitioning = true;
 		} else {
 			hasWon = true;
 			win.SetActive (true);
-            Advertisement.Show();
-			Time.timeScale = 0;    
+
+            Time.timeScale = 0;    
 		}
 	}
     public void MoveLeft()
