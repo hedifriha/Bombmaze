@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.Advertisements;
 
 
 
@@ -35,8 +36,10 @@ public class GameController : MonoBehaviour {
 
 		bomb.SetActive (false);
 		win.SetActive (false);
-
-		loadLevel (0);
+ 
+            Advertisement.Initialize("1069118");
+        
+        loadLevel (0);
 	}
 
 	public static void Die() {
@@ -46,14 +49,15 @@ public class GameController : MonoBehaviour {
 
 	public void nextLevel() {
 		if (levelIndex + 1 < levels.Length) {
-			/*levels [levelIndex].SetActive (false);
+            /*levels [levelIndex].SetActive (false);
 			levels [levelIndex + 1].SetActive (true);
 			levelIndex++;*/
-
-			isTransitioning = true;
+            Advertisement.Show();
+            isTransitioning = true;
 		} else {
 			hasWon = true;
 			win.SetActive (true);
+            Advertisement.Show();
 			Time.timeScale = 0;    
 		}
 	}
