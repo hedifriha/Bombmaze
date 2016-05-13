@@ -55,10 +55,10 @@ public class GameController : MonoBehaviour {
 
             isTransitioning = true;
 		} else {
-		/*	if (Advertisement.IsReady())
+			if (Advertisement.IsReady())
 			{
 				Advertisement.Show();
-			}*/
+			}
 			hasWon = true;
 			win.SetActive (true);
 
