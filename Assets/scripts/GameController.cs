@@ -52,12 +52,13 @@ public class GameController : MonoBehaviour {
             /*levels [levelIndex].SetActive (false);
 			levels [levelIndex + 1].SetActive (true);
 			levelIndex++;*/
-            if (Advertisement.IsReady())
-            {
-                Advertisement.Show();
-            }
+
             isTransitioning = true;
 		} else {
+			if (Advertisement.IsReady())
+			{
+				Advertisement.Show();
+			}
 			hasWon = true;
 			win.SetActive (true);
 
@@ -99,17 +100,25 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void restart() {
+
 		this.loadLevel (levelIndex);
 		isDead = false;
 		rotateOffset = 0;
 		rotateState = 0;
+		if (Advertisement.IsReady())
+		{
+			Advertisement.Show();
+		}
 	}
 
 	void Update() {
 		if (!isTransitioning) {
 			if (isDead) {
 				gameOver.SetActive (true);
-
+				if (Advertisement.IsReady())
+				{
+					Advertisement.Show();
+				}
 				if (Input.GetKeyDown ("a") || Input.GetKeyDown ("d")) {
 					isDead = false;
 					gameOver.SetActive (false);
