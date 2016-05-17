@@ -9,8 +9,13 @@ public class FbScript : MonoBehaviour
     public GameObject DialogLoggedOut;
     public GameObject DialogUsername;
     public GameObject DialogProfilePic;
+
+
+
+
 	
-	
+		private const string TWITTER_ADDRESS = "http://twitter.com/intent/tweet";
+        private const string TWEET_LANGUAGE = "en"; 
 		// Your app’s unique identifier.
 	public string AppID = "1116130085065053";
  
@@ -18,7 +23,7 @@ public class FbScript : MonoBehaviour
 	public string Link = "https://play.google.com/store/apps/developer?id=Gamestoodio";
  
 	// The URL of a picture attached to this post. The picture must be at least 200px by 200px.
-	public string Picture = "http://imageshack.us/scaled/landing/843/gh4o.png";
+	public string Picture = "http://Assets/sprites/Text/lolo.png";
  
 	// The name of the link attachment.
 	private static float scoreff;
@@ -122,11 +127,25 @@ public class FbScript : MonoBehaviour
     }
 		
     public void ShareScoreOnFB(){
-		float scoreff = Score.score;
-
+		float scoreff = Score.scoref;
+		 
 		Application.OpenURL("https://www.facebook.com/dialog/feed?"+ "app_id="+AppID+ "&link="+
-			Link+ "&picture="+Picture+ "&name="+(scoreff)+ "&caption="+
+			Link+ "&picture="+""+ "&name="+(scoreff)+ "&caption="+
 			"I just got"+(scoreff)+"score in BombMAZE Game! Can you beat it?"+ "&description="+(Description)+
 		                    "&redirect_uri=https://facebook.com/");
 	}
+
+
+
+
+public void ShareToTwitter (string textToDisplay)
+{
+		float scoreff = Score.scoref;
+Application.OpenURL(TWITTER_ADDRESS +
+			"?text=" + WWW.EscapeURL("I just got "+(scoreff)+" score in BOMB MAZE ! Can you beat it? "+"  #GAMEMAZE #EspritMobile") +
+            "&amp;lang=" + WWW.EscapeURL(TWEET_LANGUAGE));
+}
+		
+	
+	
 }

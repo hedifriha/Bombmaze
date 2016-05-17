@@ -4,15 +4,18 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.Advertisements;
 
-
-
 public class GameController : MonoBehaviour {
 	public static int rotateState = 0;
 	public static int pickupCount = 0;
 
+	private static float scoreff;
+
+
 	static int levelIndex = 0;
 	static bool isDead = false;
 	static bool hasWon = false;
+	static bool replayPressed = false;
+	static bool homePressed = false;
 	static int rotateOffset = 0;
 
 	bool isFalling = false;
@@ -29,6 +32,7 @@ public class GameController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		Time.timeScale=1;
 		for (int i = 0; i < levels.Length; i++) {
 			levels [i].SetActive (false);
 		}
@@ -38,47 +42,66 @@ public class GameController : MonoBehaviour {
 		win.SetActive (false);
 
         Advertisement.Initialize("1069118");
-
-        loadLevel(0);
+		loadLevel (0);
 	}
 
 	public static void Die() {
 		isDead = true;
-		Time.timeScale = 0; 
 	}
 
 	public void nextLevel() {
 		if (levelIndex + 1 < levels.Length) {
-            /*levels [levelIndex].SetActive (false);
+			
+			/*levels [levelIndex].SetActive (false);
 			levels [levelIndex + 1].SetActive (true);
 			levelIndex++;*/
 
-            isTransitioning = true;
-		} else {
 			if (Advertisement.IsReady())
 			{
 				Advertisement.Show();
 			}
+			isTransitioning = true;
+		} else if(scoreff<0) {
+			scoreff = 0;
+			Time.timeScale = 0;
+			hasWon = false;
+			isDead = true;
+			gameOver.SetActive (true);
+			player.SetActive (false);
+			replayPressed = false;
+		} 
+
+
+
+		else {
 			hasWon = true;
 			win.SetActive (true);
-
-            Time.timeScale = 0;    
+			player.SetActive (false);
+			replayPressed = false;
 		}
-	}
-    public void MoveLeft()
-    {
-        rotateState++;
-        rotateOffset = 90;
-        isFalling = true;
-    }
 
-    public void MoveRight()
-    {
-        rotateState--;
-        rotateOffset = -90;
-        isFalling = true;
-    }
-    public void loadLevel(int index) {
+	}
+	public void MoveLeft()
+	{
+		rotateState++;
+		rotateOffset = 90;
+		isFalling = true;
+	}
+	public void re(){
+
+		replayPressed = true;
+	}
+	public void home(){
+
+		homePressed = true;
+	}
+	public void MoveRight()
+	{
+		rotateState--;
+		rotateOffset = -90;
+		isFalling = true;
+	}
+	void loadLevel(int index) {
 		Level level = levels [index].GetComponent<Level> ();
 
 		player.SetActive (true);
@@ -100,7 +123,6 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void restart() {
-
 		this.loadLevel (levelIndex);
 		isDead = false;
 		rotateOffset = 0;
@@ -114,21 +136,35 @@ public class GameController : MonoBehaviour {
 	void Update() {
 		if (!isTransitioning) {
 			if (isDead) {
+				
 				gameOver.SetActive (true);
-				if (Advertisement.IsReady())
-				{
-					Advertisement.Show();
+				Time.timeScale = 0;
+				if (homePressed) {
+					hasWon = false;
+					levelIndex = 0;
+					SceneManager.LoadScene (0);
 				}
-				if (Input.GetKeyDown ("a") || Input.GetKeyDown ("d")) {
+				if (replayPressed) {
+					Time.timeScale = 1;
 					isDead = false;
 					gameOver.SetActive (false);
 					restart ();
+					replayPressed = false;
 				}
 			} else if (hasWon) {
-				if (Input.GetKeyDown ("a") || Input.GetKeyDown ("d")) {
+				Time.timeScale = 0;
+				isDead = false;
+				if (homePressed) {
+					hasWon = false;
+					levelIndex = 0;
+					SceneManager.LoadScene (0);
+				}
+				if (replayPressed) {
+					
 					hasWon = false;
 					levelIndex = 0;
 					SceneManager.LoadScene (1);
+					replayPressed = false;
 				}
 			} else if (rotateOffset == 0) {
 				if (Input.GetKeyDown ("a")) {
@@ -144,16 +180,16 @@ public class GameController : MonoBehaviour {
 
 
 		} else {
-			
-				isTransitioning = false;
-				levels [levelIndex].SetActive (false);
-				levels [levelIndex + 1].SetActive (true);
-				levelIndex++;
 
-				loadLevel (levelIndex);
-			}
+			isTransitioning = false;
+			levels [levelIndex].SetActive (false);
+			levels [levelIndex + 1].SetActive (true);
+			levelIndex++;
 
-		
+			loadLevel (levelIndex);
+		}
+
+
 	}
 
 	void moveObjects() {

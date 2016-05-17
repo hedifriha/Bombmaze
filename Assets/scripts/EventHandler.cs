@@ -12,4 +12,12 @@ public class EventHandler : MonoBehaviour {
 		SceneManager.LoadScene (1);
 	
 	}
+
+	public void restartGame() {
+		
+		GameController a=new GameController();
+
+		SceneManager.LoadScene (1);
+
+	}
 }
