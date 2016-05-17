@@ -43,7 +43,9 @@ public class GameController : MonoBehaviour {
 
         Advertisement.Initialize("1069118");
 		loadLevel (0);
-	}
+
+
+    }
 
 	public static void Die() {
 		isDead = true;
@@ -74,7 +76,12 @@ public class GameController : MonoBehaviour {
 
 
 		else {
-			hasWon = true;
+
+            if (Advertisement.IsReady())
+            {
+                Advertisement.Show();
+            }
+            hasWon = true;
 			win.SetActive (true);
 			player.SetActive (false);
 			replayPressed = false;
